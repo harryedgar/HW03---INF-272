@@ -1,0 +1,140 @@
+﻿@using u22749472_HW3.Models
+@model u22749472_HW3.Models.DataViewModel
+
+@{
+    ViewBag.Title = "Report";
+}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<div class="container">
+
+    @*////////////////////////////////////////////////////////////   Report /////////////////////////////////////////////////////////*@
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Monthly Borrowed Books Report</h3>
+            <canvas id="monthlyBorrowChart" width="300" height="100"></canvas>
+            <div>
+                <label for="fileName">File Name</label>
+                <input type="text" id="fileName" />
+
+                <label for="fileType">File Type</label>
+                <select id="fileType">
+                    <option value="png">PNG</option>
+                    <option value="png">PDF</option>
+                    <option value="png">JPG</option>
+                    <option value="png">JPEG</option>
+                </select>
+
+                <button id="saveChart" class="btn btn-secondary">Save Chart</button>
+            </div>
+        </div>
+
+
+    @*////////////////////////////////////////////////////////////   Archive /////////////////////////////////////////////////////////*@
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Archives</h3>
+            <table class="table">
+                <tbody>
+                    @*@foreach (var files in Directory.GetFiles(Server.MapPath("~/repos")))
+                            {
+                                var fileName = Path.GetFileName(files);
+                                <tr>
+                                    <td>@fileName</td>
+                                    <td>
+                                        <button id="savearchive" data-file="@fileName" class="btn btn-secondary">Download Archive</button>
+                                    </td>
+                                    <td>
+                                        <button id="deletearchive" data-file="@fileName" class="deletearchive btn btn-secondary">Delete Archive</button>
+                                    </td>
+        <a href="~/Views/Home/Report.cshtml">~/Views/Home/Report.cshtml</a>
+                                </tr>
+                            }*@
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+    <script>
+     // Get the monthly borrow counts from ViewBag
+            var monthlyCounts = @Html.Raw(Json.Encode(ViewBag.MonthlyBorrowCounts));
+
+            // Extract years and months
+            var years = monthlyCounts.map(item => item.Year);
+            var months = monthlyCounts.map(item => item.Month);
+            var counts = monthlyCounts.map(item => item.Count);
+
+            // Create labels in the format "YYYY-MM"
+            var labels = years.map((year, index) => year + "-" + (months[index] < 10 ? "0" : "") + months[index]);
+
+            var ctx = document.getElementById('monthlyBorrowChart').getContext('2d');
+            var chart = new Chart(ctx, {
+             type: 'bar',
+                data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Books Borrowed',
+                    data: counts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+                },
+
+                options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                   }
+                 }
+            });
+
+        $("#savereport").click(function () {
+            var fileName = $("fileName").val();
+            var fileType = $("fileType").val();
+
+            var dataURL = document.getElementById('monthlyBorrowChart').toDateURL("image/" + fileType);
+
+            var link = document.createElement('a');
+            link.href = dataURL;
+            link.download = fileName + "." + fileType;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            location.reload();
+        })   
+
+        $("#savearchive").click(function () {
+            var fileName = $(this).data("file");
+            var fileNameParts = fileName.split('.');
+            var fileBName = fileNameParts[0];
+            var fileType = fileNameParts[1];
+
+            var dataURL = document.getElementById('monthlyBorrowChart').toDateURL("image/" + fileType);
+
+            var link = document.createElement('a');
+            link.href = dataURL;
+            link.download = fileName + "." + fileType;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            location.reload();
+
+        })
+
+    </script>
+

@@ -1,0 +1,639 @@
+﻿@model u22749472_HW3.Models.DataViewModel
+@{
+    ViewBag.Title = "Home";
+}
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+
+
+
+
+<div class="container">
+
+    @*////////////////////////////////////////////////////////////   Students  /////////////////////////////////////////////////////////*@
+    <div class="row">
+        <div class="col-6">
+            <h3 class="float-left">Students</h3>
+            <p>
+                @*@Html.ActionLink("Create New", "Create", "ListItemPriorities")*@
+                <a href="#" class="btn btn-primary, float-right" style="background-color:dimgrey; padding: 5px 15px; font-size: 15px;"
+                   data-toggle="modal" data-target="#ListItemPriorityModal">Create</a>
+            </p>
+            @*Modal Code for ListItemPriorities*@
+            <div class="modal fade" id="ListItemPriorityModal">
+                <!-- Modal content goes here -->
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                Library Management
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("Create", "students", FormMethod.Post, new { id = "students" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newStudent.name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newStudent.name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.surname, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newStudent.surname, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newStudent.surname, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.birthdate, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newStudent.birthdate, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newStudent.birthdate, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.gender, "Gender")
+                                    @Html.DropDownListFor(model => model.newStudent.gender, new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "Male", Value = "Male" },
+                                        new SelectListItem { Text = "Female", Value = "Female" }
+                                    }, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.studentclass, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newStudent.studentclass, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newStudent.studentclass, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.point, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newStudent.point, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newStudent.point, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="submit" id="btnSaveToDoList" value="Create" class="btn btn-primary">Save</button>
+                                    <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*Edit, Delete, Details*@
+            <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Prioritization</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("Edit", "students", FormMethod.Post, new { id = "editForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <a href="~/Views/Home/Home.cshtml">~/Views/Home/Home.cshtml</a>
+
+                                <!-- Add input fields for editing -->
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.name, "Name")
+                                    @Html.EditorFor(model => model.newStudent.name, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.surname, "Surname")
+                                    @Html.EditorFor(model => model.newStudent.surname, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.birthdate, "Birthdate")
+                                    @Html.EditorFor(model => model.newStudent.birthdate, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.gender, "Gender")
+                                    @Html.DropDownListFor(model => model.newStudent.gender, new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "Male", Value = "Male" },
+                                        new SelectListItem { Text = "Female", Value = "Female" }
+                                    }, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.studentclass, "Class")
+                                    @Html.EditorFor(model => model.newStudent.studentclass, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.point, "Point")
+                                    @Html.EditorFor(model => model.newStudent.point, new { @class = "form-control" })
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    <input type="submit" value="Save" class="btn btn-primary" form="editForm" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailsModalLabel">Prioritization</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("Edit", "ToDoLists", FormMethod.Post, new { id = "editForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <!-- Add input fields for editing -->
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.name, "Name")
+                                    @Html.EditorFor(model => model.newStudent.name, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.surname, "Surname")
+                                    @Html.EditorFor(model => model.newStudent.surname, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.birthdate, "Birthdate")
+                                    @Html.EditorFor(model => model.newStudent.birthdate, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.gender, "Gender")
+                                    @Html.DropDownListFor(model => model.newStudent.gender, new List<SelectListItem>
+                                    {
+                                        new SelectListItem { Text = "Male", Value = "Male" },
+                                        new SelectListItem { Text = "Female", Value = "Female" }
+                                    }, new { @class = "form-control" })
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.studentclass, "Class")
+                                    @Html.EditorFor(model => model.newStudent.studentclass, new { @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newStudent.point, "Point")
+                                    @Html.EditorFor(model => model.newStudent.point, new { @class = "form-control" })
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="delete2Modal" tabindex="-1" role="dialog" aria-labelledby="delete2ModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="delete2ModalLabel">Confirm Delete</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this record?</p>
+                        </div>
+                        <div class="modal-footer">
+                            @using (Html.BeginForm("Delete", "student", new { id = 0 }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" id="deletePriorityId" name="id" /> <!-- Hidden field to store the item ID to be deleted -->
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <input type="submit" value="Delete" class="btn btn-danger" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-light table-striped" id="myTable">
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Surname
+                    </th>
+                    <th>
+                        Birthdate
+                    </th>
+                    <th>
+                        Gender
+                    </th>
+                    <th>
+                        Class
+                    </th>
+                    <th>
+                        Point
+                    </th>
+                </tr>
+                @foreach (var item in Model.students)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.birthdate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.studentclass)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.point)
+                        </td>
+                    </tr>
+                }
+            </table>
+            <ul class="pagination" id="pagination">
+                <!-- Pagination links will be generated here using JavaScript -->
+            </ul>
+
+        </div>
+
+        @*////////////////////////////////////////////////////////////   Books  /////////////////////////////////////////////////////////*@
+        <div class="col-6">
+            <h3 class="float-left">Books</h3>
+            <p>
+                @*@Html.ActionLink("Create New", "Create", "ListItems")*@
+                <a href="#" class="btn btn-primary, float-right" style="background-color:dimgrey; padding: 5px 15px; font-size: 15px;"
+                   data-toggle="modal" data-target="#ListItemModal">Create</a>
+            </p>
+            @*Modal Code for ListItems*@
+            <div class="modal fade" id="ListItemModal">
+                <!-- Modal content goes here -->
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">
+                                To Do List information
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("Create", "books", FormMethod.Post, new { id = "books" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newBook.name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newBook.name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newBook.name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newBook.pagecount, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newBook.pagecount, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newBook.pagecount, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newBook.point, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newBook.point, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newBook.point, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="submit" id="btnSaveToDoList" value="Create" class="btn btn-primary">Save</button>
+                                    <button type="button" id="btnCancel" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="editlModal" tabindex="-1" aria-labelledby="editlModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editlModalLabel">Prioritization</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("Edit", "books", FormMethod.Post, new { id = "edit1Form" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newBook.name, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newBook.name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newBook.name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newBook.pagecount, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newBook.pagecount, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newBook.pagecount, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.newBook.point, htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.EditorFor(model => model.newBook.point, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.newBook.point, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="detailslModal" tabindex="-1" aria-labelledby="detailslModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="detailslModalLabel">Prioritization</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            @using (Html.BeginForm("Edit", "books", FormMethod.Post, new { id = "edit1Form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-horizontal">
+                                    <h4>ListItem</h4>
+                                    <hr />
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    <div class="form-group">
+                                        @Html.HiddenFor(model => model.newBook.bookId)
+                                        @Html.LabelFor(model => model.newBook.bookId, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            @Html.TextBoxFor(model => model.newBook.name, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                            @Html.ValidationMessageFor(model => model.newBook.name, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-10">
+                                            @Html.TextBoxFor(model => model.newBook.pagecount, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                            @Html.ValidationMessageFor(model => model.newBook.pagecount, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="col-md-10">
+                                            @Html.TextBoxFor(model => model.newBook.point, new { htmlAttributes = new { @class = "form-control", disabled = "disabled" } })
+                                            @Html.ValidationMessageFor(model => model.newBook.point, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="deletelModal" tabindex="-1" role="dialog" aria-labelledby="deletelModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deletelModalLabel">Confirm Delete</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete this record?</p>
+                        </div>
+                        <div class="modal-footer">
+                            @using (Html.BeginForm("Delete", "books", new { id = 0 }, FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <input type="hidden" id="deleteListItemId" name="id" /> <!-- Hidden field to store the item ID to be deleted -->
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <input type="submit" value="Delete" class="btn btn-danger" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-light table-striped" id="myTable">
+                <tr>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+                @foreach (var item in Model.books)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.pagecount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.point)
+                        </td>
+                        <td>
+                            @(ViewBag.BookStatus?.ContainsKey(item.bookId) == true ? ViewBag.BookStatus[item.bookId] : "Unknown")
+                        </td>
+                    </tr>
+                }
+            </table>
+            <ul class="pagination" id="pagination">
+                <!-- Pagination links will be generated here using JavaScript -->
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+
+@*Pagination*@
+<script>
+    // JavaScript code to dynamically generate pagination links
+    const table = document.getElementById('myTable');
+    const pagination = document.getElementById('pagination');
+    const rowsPerPage = 10; // Number of rows per page
+
+    const numRows = table.rows.length - 1; // Subtracting the header row
+    const numPages = Math.ceil(numRows / rowsPerPage);
+
+    for (let i = 1; i <= numPages; i++) {
+        const li = document.createElement('li');
+        li.className = 'page-item';
+        const a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = '#';
+        a.innerText = i;
+        li.appendChild(a);
+        pagination.appendChild(li);
+    }
+
+    // Add event listeners to handle page navigation
+    const pageLinks = document.querySelectorAll('.page-link');
+    pageLinks.forEach((link, index) => {
+        link.addEventListener('click', () => {
+            showPage(index + 1); // Pages are 1-indexed
+        });
+    });
+
+    // Function to display the specified page
+    function showPage(pageNumber) {
+        const start = (pageNumber - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        for (let i = 1; i <= numRows; i++) {
+            const row = table.rows[i];
+            if (i > start && i <= end) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        }
+    }
+
+    // Show the first page by default
+    showPage(1);
+</script>
+
+
+
+
+
+@*ToDo List scripts*@
+<script>
+    $(document).ready(function () {
+        $('.edit-button').click(function () {
+            var taskId = $(this).data('taskid');
+            var listItemID = $(this).data('listitemid');
+            var dueDate = $(this).data('duedate');
+            var priorityID = $(this).data('priorityid');
+
+            $('#editModal #NewToDoList_TaskID').val(taskId);
+            $('#editModal #NewToDoList_ListItemID').val(listItemID);
+            $('#editModal #NewToDoList_DueDate').val(dueDate);
+            $('#editModal #NewToDoList_PriorityID').val(priorityID);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.details-button').click(function () {
+            var taskId = $(this).data('taskid');
+            var listItemID = $(this).data('listitemid');
+            var dueDate = $(this).data('duedate');
+            var priorityID = $(this).data('priorityid');
+
+            $('#detailsModal #NewToDoList_TaskID').val(taskId);
+            $('#detailsModal #NewToDoList_ListItemID').val(listItemID);
+            $('#detailsModal #NewToDoList_DueDate').val(dueDate);
+            $('#detailsModal #NewToDoList_PriorityID').val(priorityID);
+        });
+    });
+</script>
+<script>
+    $('.delete-button').click(function () {
+        var itemId = $(this).data('taskid'); // Get the item ID from the data-taskid attribute
+        $('#deleteItemId').val(itemId); // Set the value of the hidden input field
+
+        // Update the form's action URL to include the item ID
+        $('#deleteModal form').attr('action', '/ToDoLists/Delete/' + itemId);
+    });
+</script>
+
+@*ListItem*@
+<script>
+    $(document).ready(function () {
+        $('.edit1-button').click(function () {
+            var listItemID = $(this).data('listitemid');
+            var description = $(this).data('description');
+
+            $('#editlModal #NewListItem_ListItemID').val(listItemID);
+            $('#editlModal #NewListItem_Description').val(description);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.details1-button').click(function () {
+            var listItemID = $(this).data('listitemid');
+            var description = $(this).data('description');
+
+            $('#detailslModal #NewListItem_ListItemID').val(listItemID);
+            $('#detailslModal #NewListItem_Description').val(description);
+        });
+    });
+</script>
+<script>
+    $('.delete2-button').click(function () {
+        var listitemId = $(this).data('listitemid'); // Get the item ID from the data-taskid attribute
+        $('#deleteListItemId').val(listitemId); // Set the value of the hidden input field
+
+        // Update the form's action URL to include the item ID
+        $('#deletelModal form').attr('action', '/ListItems/Delete/' + listitemId);
+    });
+</script>
+
+@*ListItem Priorities*@
+<script>
+    $(document).ready(function () {
+        $('.edit2-button').click(function () {
+            var priorityID = $(this).data('priorityid');
+            var priorityname = $(this).data('priorityname');
+
+            $('#edit2Modal #NewListItemPriority_PriorityID').val(priorityID);
+            $('#edit2Modal #NewListItemPriority_PriorityName').val(priorityname);
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('.details2-button').click(function () {
+            var priorityID = $(this).data('priorityid');
+            var priorityName = $(this).data('priorityname');
+
+            $('#details2Modal #NewListItemPriority_PriorityID').val(priorityID);
+            $('#details2Modal #NewListItemPriority_PriorityName').val(priorityName);
+        });
+    });
+</script>
+<script>
+    $('.delete3-button').click(function () {
+        var priorityId = $(this).data('priorityid'); // Get the item ID from the data-taskid attribute
+        $('#deletePriorityId').val(priorityId); // Set the value of the hidden input field
+
+        // Update the form's action URL to include the item ID
+        $('#delete2Modal form').attr('action', '/ListItemPriorities/Delete/' + priorityId);
+    });
+</script>
